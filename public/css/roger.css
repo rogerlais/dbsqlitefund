@@ -1,0 +1,19 @@
+.roger-textarea {
+	border: 1px solid #999999;
+	margin: 5px 0;
+	margin-bottom: 2px;
+	padding: 3px;
+	width: 100%;
+	height: 100%;
+	font-style: italic;
+}
+
+.roger-fullparent {
+	border: 1px solid #999999;
+	margin-bottom: 2px;
+	margin: 5px 0;
+	padding: 3px;
+	width: 100%;
+	height: 100%;
+	font-style: italic;
+}

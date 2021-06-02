@@ -1,39 +1,39 @@
 const { conn } = require("../db");
 
 async function create(data) {
-  const sql = `
+	const sql = `
   INSERT INTO
     hosts (name, address)
   VALUES
     (?, ?)
   `;
 
-  const db = await conn();
+	const db = await conn();
 
-  const { name, address } = data;
+	const { name, address } = data;
 
-  const { lastID } = await db.run(sql, [name, address]);
+	const { lastID } = await db.run(sql, [name, address]);
 
-  return lastID;
+	return lastID;
 }
 
 async function readAll() {
-  const sql = `
+	const sql = `
     SELECT
       *
     FROM
       hosts
   `;
 
-  const db = await conn();
+	const db = await conn();
 
-  const hosts = await db.all(sql);
+	const hosts = await db.all(sql);
 
-  return hosts;
+	return hosts;
 }
 
 async function readByNameAddress(name, address) {
-  const sql = `
+	const sql = `
     SELECT
       *
     FROM
@@ -42,15 +42,15 @@ async function readByNameAddress(name, address) {
       name = ? AND address = ?
   `;
 
-  const db = await conn();
+	const db = await conn();
 
-  const hosts = await db.all(sql, [name, address]);
+	const hosts = await db.all(sql, [name, address]);
 
-  return hosts;
+	return hosts;
 }
 
 async function readAllWithLogs() {
-  const sql = `
+	const sql = `
     SELECT
       hosts.id,
       hosts.name,
@@ -66,11 +66,43 @@ async function readAllWithLogs() {
       hosts.address
   `;
 
-  const db = await conn();
+	const db = await conn();
 
-  const hosts = await db.all(sql);
+	const hosts = await db.all(sql);
 
-  return hosts;
+	return hosts;
 }
 
-module.exports = { create, readAll, readByNameAddress, readAllWithLogs };
+async function read(id) {
+	const q = `
+    SELECT
+      hosts.id,
+      hosts.name,
+      hosts.address,
+	  hosts.online, 
+	  hosts.lastcheck
+    FROM
+      hosts
+    WHERE
+      hosts.id = ?
+	`;
+	const db = await conn();
+	const hosts = await db.all(q);
+	return hosts;
+}
+
+async function remove( id ){
+	const q = `
+    DELETE
+    FROM
+      hosts
+    WHERE
+      hosts.id = ?
+	`;
+	const db = await conn();
+	const hosts = await db.all(q);
+	return hosts;
+
+};
+
+module.exports = { create, read, remove, readAll, readByNameAddress, readAllWithLogs };
