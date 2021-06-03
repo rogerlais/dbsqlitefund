@@ -16,6 +16,18 @@
                 "<node_internals>/**"
             ],
             "type": "pwa-node"
+        },
+		{
+            //!Lembrar de chamar o chrome com:
+            //google-chrome --remote-debugging-port=9222&
+            //!Lembrar de subir o serviço com:
+            //npm start
+            "name": "Attach to Chrome",
+            "request": "attach",
+            "port": 9222,
+            "type": "pwa-chrome",
+            "webRoot": "${workspaceFolder}/hosts/index",
+            "urlFilter": "http://localhost:3000/*"
         }
     ]
 }

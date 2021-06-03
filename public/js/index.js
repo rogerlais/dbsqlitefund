@@ -1,56 +1,56 @@
 function createHostRow(hostContainer, host) {
-  const hostView = `<tr id="host-${host.id}">
+	const hostView = `<tr id="host-${host.id}">
     <td class="host-name">${host.name}</td>
     <td class="host-address">${host.address}</td>
     <td class="host-transmitted">${host.transmitted}</td>
     <td class="host-received">${host.received}</td>
   </tr>`;
 
-  hostContainer.insertAdjacentHTML("beforeend", hostView);
+	hostContainer.insertAdjacentHTML("beforeend", hostView);
 }
 
 async function loadHosts() {
-  const res = await fetch("/hosts/logs");
+	const res = await fetch("/hosts/logs");
 
-  const hosts = await res.json();
+	const hosts = await res.json();
 
-  const hostContainer = document.querySelector(".table-hosts tbody");
+	const hostContainer = document.querySelector(".table-hosts tbody");
 
-  hostContainer.innerHTML = "";
+	hostContainer.innerHTML = "";
 
-  for (const host of hosts) {
-    createHostRow(hostContainer, host);
-  }
+	for (const host of hosts) {
+		createHostRow(hostContainer, host);
+	}
 }
 
 function loadFormValues(title, hostName, hostCount) {
-  const formLabel = document.querySelector("#hostFormLabel");
-  const hostNameInput = document.querySelector("#host-name");
-  const hostCountInput = document.querySelector("#host-count");
+	const formLabel = document.querySelector("#hostFormLabel");
+	const hostNameInput = document.querySelector("#host-name");
+	const hostCountInput = document.querySelector("#host-count");
 
-  formLabel.innerHTML = title;
-  hostNameInput.value = hostName;
-  hostCountInput.value = hostCount;
+	formLabel.innerHTML = title;
+	hostNameInput.value = hostName;
+	hostCountInput.value = hostCount;
 }
 
 function loadFormCreateHost() {
-  const hostForm = document.querySelector("#hostForm");
+	const hostForm = document.querySelector("#hostForm");
 
-  loadFormValues("Ping", "", "");
+	loadFormValues("Ping", "", "");
 
-  hostForm.onsubmit = async (e) => {
-    e.preventDefault();
+	hostForm.onsubmit = async (e) => {
+		e.preventDefault();
 
-    const { name, count } = Object.fromEntries(new FormData(hostForm));
+		const { name, count } = Object.fromEntries(new FormData(hostForm));
 
-    await fetch(`/ping/${name}/${count}`);
+		await fetch(`/ping/${name}/${count}`);
 
-    $("#hostFormModal").modal("toggle");
+		$("#hostFormModal").modal("toggle");
 
-    document.querySelector("#createHostBtn").blur();
+		document.querySelector("#createHostBtn").blur();
 
-    loadHosts();
-  };
+		loadHosts();
+	};
 }
 
 window.loadFormCreateHost = loadFormCreateHost;

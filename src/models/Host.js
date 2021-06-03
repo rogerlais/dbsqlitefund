@@ -32,19 +32,19 @@ async function readAll() {
 	return hosts;
 }
 
-async function readByNameAddress(name, address) {
+async function readByName(name) {
 	const sql = `
     SELECT
       *
     FROM
       hosts
     WHERE
-      name = ? AND address = ?
+      name = ?
   `;
 
 	const db = await conn();
 
-	const hosts = await db.all(sql, [name, address]);
+	const hosts = await db.all(sql, [name]);
 
 	return hosts;
 }
@@ -73,25 +73,39 @@ async function readAllWithLogs() {
 	return hosts;
 }
 
-async function read(id) {
+async function readById(id) {
 	const q = `
     SELECT
-      hosts.id,
-      hosts.name,
-      hosts.address,
-	  hosts.online, 
-	  hosts.lastcheck
-    FROM
+		*
+	FROM
       hosts
     WHERE
       hosts.id = ?
 	`;
+
+	// const q = `
+	// SELECT
+	//   hosts.id,
+	//   hosts.name,
+	//   hosts.address,
+	//   hosts.online,
+	//   hosts.lastcheck
+	// FROM
+	//   hosts
+	// WHERE
+	//   hosts.id = ?
+	// `;
 	const db = await conn();
-	const hosts = await db.all(q);
-	return hosts;
+	//const hosts = await db.get(q, { id });
+	// const ret = db.get(q, id).then((data) => {
+	// 	const hosts = data;
+	// 	console.log( hosts );
+	// });
+	const ret = db.get(q, id);
+	return ret;
 }
 
-async function remove( id ){
+async function remove(id) {
 	const q = `
     DELETE
     FROM
@@ -102,7 +116,13 @@ async function remove( id ){
 	const db = await conn();
 	const hosts = await db.all(q);
 	return hosts;
+}
 
+module.exports = {
+	create,
+	readById,
+	remove,
+	readAll,
+	readByName,
+	readAllWithLogs,
 };
-
-module.exports = { create, read, remove, readAll, readByNameAddress, readAllWithLogs };

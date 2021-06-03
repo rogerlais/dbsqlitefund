@@ -1,0 +1,35 @@
+@domain = http://localhost:3000
+
+### Leitura de página com todos os arquivos:
+GET {{domain}}/hosts/1
+
+### Leitura dos dados json-arquivos
+get {{domain}}/hosts
+
+Content-Type: text/plain
+{
+  "name": "test.txt",
+  "content": "Apenas um teste - roger"
+}
+
+### Leitura dos dados do arquivo 1
+@id=1
+get {{domain}}/hosts/{{id}}
+
+### Create host(test.txt)
+POST {{domain}}/hosts
+
+Content-Type: text/plain
+{
+  "name": "test.txt",
+  "content": "Apenas um teste - roger"
+}
+
+### Read Host by name
+GET {{domain}}/hosts/hosts?name=pc1
+
+###! Read Host by id
+
+@id = 1
+GET {{domain}}/hosts/{{id}}
+

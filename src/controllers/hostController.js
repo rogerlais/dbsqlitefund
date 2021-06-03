@@ -20,13 +20,13 @@ const readAll = async (req, res) => {
 
 const read = async (req, res) => {
 	const { name } = req.query;
-	const ret = Host.read( name );
+	const ret = await Host.readByName( name );
 	res.json(ret);
 };
 
-const readById = (req, res) => {
+const readById = async (req, res) => {
 	const id = Number(req.params.id);
-	const h = Host.readById(id);
+	const h = await Host.readById(id);
 	if (h) {
 		return res.json(h);
 	} else {
@@ -34,7 +34,7 @@ const readById = (req, res) => {
 	}
 };
 
-const remove = (req, res) => {
+const remove = async (req, res) => {
 	const id = Number(req.params.id);
 	if (Host.remove(id)) {
 		return res.status(204).send();

@@ -4,11 +4,11 @@
 
 {% block content %}
 	<h1 class="my-5 text-center">{{ title }}</h1>
-	<form>
+	<form action="/hosts" method="POST">
 		<div class="form-group">
 			<label for="hostname">Nome do host</label>
 			<input type="text"
-			class="form-control" name="hostname" id="hostname" aria-describedby="helpId" placeholder="hostname">
+			class="form-control" name="name" id="hostname" aria-describedby="helpId" placeholder="hostname">
 			<small id="helpId" class="form-text text-muted">Nome do host para testar conectividade</small>
 		</div>
 		<button type="submit" class="btn btn-primary">Submit</button>
@@ -31,14 +31,14 @@
 	{% endfor %}
 </select>
 <section class="card-deck">
-	<div class="card">
+	<div class="card" id="hostCard">
 		<div class="card-header text-center font-weight-bold">
-			<span>Nome:{{ host.name }}</span>
+			<span >Nome:{{ host.name }}</span>
 		</div>
 		{% if file.isDirectory %}
 			<div class="card-body p-0">
 				<i class="fas fa-h3    "></i>
-				<img src="/imgs/folder.png" alt="{{ file.name }}" class="w-100">
+				{# <img src="/imgs/folder.png" alt="{{ file.name }}" class="w-100"> #}
 			</div>
 		{% elif file.isImage %}
 			<div class="card-body p-0">
@@ -57,8 +57,8 @@
 			</div>
 		{% else %}
 			<div class="card-body p-0">
-				<img src="/imgs/unknown.png" alt="{{ file.name }}" class="w-100">
-				{# <img src="{{ file.image }}" alt="{{ file.name }}" class="w-100"> #}
+				{# <img src="/imgs/unknown.png" alt="{{ file.name }}" class="w-100">
+				<img src="{{ file.image }}" alt="{{ file.name }}" class="w-100"> #}
 			</div>
 		{% endif %}
 		<div class="card-footer text-right">
@@ -70,12 +70,34 @@
 {% block script %}
 <script>
 
-	function hostChanged() {
+	async function hostChanged() {
 		ctl = document.getElementById("hostselection");
 		sel = this.ctl.selectedOptions;
-		if (sel && sel[0].innerText != '') { //hack trata-se de table, dai o indice
-			alert(sel[0].innerText);
+		if (sel && sel[0].innerText != '') { //HACK trata-se de table, dai o indice
+			key = sel[0]
+				.innerText
+				.split(' ')[0]; //leitura da chave
+		} else {
+			key = null;
 		}
+		try {
+			const hostdata = await fetchHostData(key);
+			alert(JSON.stringify(hostdata));
+		} catch(err)  {
+			alert(`Fetch problem: ${err.message}`);
+		}
+	}
+
+	async function fetchHostData(key) {
+		const ret = await fetch(`${document.location.origin}/hosts/${key}`);
+		if (!ret.ok) {
+			throw new Error(ret.statusText);
+		}
+		const json = await ret.json();
+		if (json.auth && json.auth === false) {
+			throw new Error(json.message);
+		}
+		return json;
 	}
 
 	//leitura dos tamanhos dos arquivos
