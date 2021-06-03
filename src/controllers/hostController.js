@@ -1,8 +1,12 @@
 const Host = require("../models/Host");
+const nunjucks = require("nunjucks");
 
 const index = async (req, res) => {
 	const hosts = await Host.readAll();
-	res.render("hosts/index.njk", { hosts });
+	//* forma original 
+	//res.render("hosts/_njk_index.html", { hosts });
+	const h = nunjucks.render("hosts/_njk_index.html", { hosts: hosts, data : JSON.stringify( hosts ) });
+	res.send( h );
 };
 
 const create = async (req, res) => {
@@ -13,7 +17,6 @@ const create = async (req, res) => {
 
 const readAll = async (req, res) => {
 	const hosts = await Host.readAllWithLogs();
-
 	res.json(hosts);
 };
 

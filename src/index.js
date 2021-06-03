@@ -9,8 +9,9 @@ const nunjucks = require("nunjucks");
 const routes = require("./routes");
 const Migration = require("./migrations");
 const { dbFile } = require("./db");
+const { Server } = require("http");
 
-const app = express();
+let app = express();
 
 app.set("view engine", "njk");
 nunjucks.configure("src/views", {
@@ -21,6 +22,7 @@ nunjucks.configure("src/views", {
 app.use(cors());
 
 const port = 3000;
+//server.expressApp = this; //* a ser usado para logs posteriormente
 
 app.use(routes);
 app.use(express.static("public"));
@@ -33,7 +35,9 @@ app.use(express.static("public"));
 	// }
 })();
 
-app.listen(port, () => {
+var itself = app.listen(port, ( ) => {
+	let it = app; //inserida no escopo com a atribuição let acima
+	//console.log( it );
 	console.log("Server running");
 	console.log("Rotas presentes nesta aplicação:");
 	if (app._router.stack) {
@@ -45,4 +49,6 @@ app.listen(port, () => {
 	} else {
 		console.log("Nenhum registrada");
 	}
+	const bkUtils = require("./bk_utils");
+	bkUtils.logRoutes( it );
 });
