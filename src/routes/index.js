@@ -7,7 +7,7 @@ const tests = require("./tests");
 
 router.get("/", (req, res) => {
 	console.log(req.url);
-	res.redirect("/hosts/index");
+	res.redirect("/hosts");
 });
 router.use("/hosts", hosts);
 router.use("/tests", tests);

@@ -15,67 +15,69 @@
 	</form>
 
 	<label for="sel2">Mutiple select list (hold shift to select more than one):</label>
-	<select multiple class="form-control" id="hostselection">
+	<select multiple class="form-control" id="hostselection" onchange="hostChanged()">
 		{% for host in hosts %}
 			<option>
 				<table width:100%;
 					<tr>
 						<td>{{host.id}}</td>
-						<td>{{host.name}}</td>
-						<td>{{host.IPV4}}</td>
-						<td>{{host.online}}</td>
-						<td>{{host.lastcheck}}</td>
-					</tr>
-				</table>
-			</option>
-		{% endfor %}
-	</select>
+					<td>{{host.name}}</td>
+					<td>{{host.IPV4}}</td>
+					<td>{{host.online}}</td>
+					<td>{{host.lastcheck}}</td>
+				</tr>
+			</table>
+		</option>
+	{% endfor %}
+</select>
 <section class="card-deck">
-		<div class="card">
-			<div class="card-header text-center font-weight-bold">
-				<span>Nome:{{ host.name }}</span>
+	<div class="card">
+		<div class="card-header text-center font-weight-bold">
+			<span>Nome:{{ host.name }}</span>
+		</div>
+		{% if file.isDirectory %}
+			<div class="card-body p-0">
+				<i class="fas fa-h3    "></i>
+				<img src="/imgs/folder.png" alt="{{ file.name }}" class="w-100">
 			</div>
-			{% if file.isDirectory %}
-				<div class="card-body p-0">
-					<i class="fas fa-h3    "></i>
-					<img src="/imgs/folder.png" alt="{{ file.name }}" class="w-100">
-				</div>
-			{% elif file.isImage %}
-				<div class="card-body p-0">
-					<i class="fas fa-h3    "></i>
-					<img src="/datafiles/{{ file.name }}" alt="{{ file.name }}" class="w-100">
-				</div>
-			{% elif file.isText %}
-				<div class="card-body p-0">
-					<div class="roger-fullparent">
-						<textarea class="roger-textarea"
+		{% elif file.isImage %}
+			<div class="card-body p-0">
+				<i class="fas fa-h3    "></i>
+				<img src="/datafiles/{{ file.name }}" alt="{{ file.name }}" class="w-100">
+			</div>
+		{% elif file.isText %}
+			<div class="card-body p-0">
+				<div class="roger-fullparent">
+					<textarea class="roger-textarea"
 								id="resultGetFileContent"							
 								placeholder="Em breve o arquivo....">
 								/datafiles/{{ file.name }}
-						</textarea>
-					</div>
+					</textarea>
 				</div>
-			{% else %}
-				<div class="card-body p-0">
-					<img src="/imgs/unknown.png" alt="{{ file.name }}" class="w-100">
-					{# <img src="{{ file.image }}" alt="{{ file.name }}" class="w-100"> #}
-				</div>
-			{% endif %}
-			<div class="card-footer text-right">
-				{{ file.size }}
 			</div>
+		{% else %}
+			<div class="card-body p-0">
+				<img src="/imgs/unknown.png" alt="{{ file.name }}" class="w-100">
+				{# <img src="{{ file.image }}" alt="{{ file.name }}" class="w-100"> #}
+			</div>
+		{% endif %}
+		<div class="card-footer text-right">
+			{{ file.size }}
 		</div>
+	</div>
 </section>
-
-{# <div class="form-group">
-	<label for="debugdata">Recebido=</label>
-	<textarea class="form-control" name="debugdata" id="debugdata" rows="3">vazio</textarea>
-</div> #}
-
 {% endblock %}
-
 {% block script %}
 <script>
+
+	function hostChanged() {
+		ctl = document.getElementById("hostselection");
+		sel = this.ctl.selectedOptions;
+		if (sel && sel[0].innerText != '') { //hack trata-se de table, dai o indice
+			alert(sel[0].innerText);
+		}
+	}
+
 	//leitura dos tamanhos dos arquivos
 	const sizes = document.querySelectorAll('.card-footer');
 	sizes.forEach((size) => {
@@ -94,8 +96,6 @@
 		xmlhttp.open('GET', url, false);
 		xmlhttp.send();
 		text = xmlhttp.responseText;
-		//text = 'Conteúdo remoto capturado com sucesso!!!' + url;
-		//fileURL.innerHTML = text + fileURL.innerHTML;
 		fileURL.value = text;
 	});
 </script>
