@@ -4,7 +4,6 @@
 
 {% block content %}
 	<h1 class="my-5 text-center">{{ title }}</h1>
-
 	<form>
 		<div class="form-group">
 			<label for="hostname">Nome do host</label>
@@ -91,33 +90,43 @@
 
 {% block script %}
 <script>
-	//info debug
-	dbgControl = document.getElementById( "debugdata" );
-	dbgControl.innerHTML = {{ data }};
+//info debug
+//!! importante
+const viewDebug = "{{viewDebug}}";
+dbgControl = document.getElementById("debugdata");
+if (viewDebug === 'true') {
+	content = "{{ getNunjucksVars() | dump }}"
+	if (content) {
+		dbgControl.innerHTML = content;
+	} else {
+		dbgControl.innerHTML = "Nada recebido para hosts";
+	}
+} else {
+	dbgControl.hidden = true;
+}
 
 
-	//leitura dos tamanhos dos arquivos
-	const sizes = document.querySelectorAll('.card-footer');
-	sizes.forEach((size) => {
-		size.innerHTML = "Tamanho = " + size.innerHTML;
-	});
+//leitura dos tamanhos dos arquivos
+const sizes = document.querySelectorAll('.card-footer');
+sizes.forEach((size) => {
+	size.innerHTML = "Tamanho = " + size.innerHTML;
+});
 
-	//leotura dos conteúdos de texto
-	const fileContents = document.querySelectorAll('.roger-textarea');
-	fileContents.forEach((fileURL) => {
-		url = fileURL.ownerDocument.location.origin + fileURL
-			.value
-			.trim();
-		var xmlhttp,
-			text;
-		xmlhttp = new XMLHttpRequest();
-		xmlhttp.open('GET', url, false);
-		xmlhttp.send();
-		text = xmlhttp.responseText;
-		//text = 'Conteúdo remoto capturado com sucesso!!!' + url;
-		//fileURL.innerHTML = text + fileURL.innerHTML;
-		fileURL.value = text;
-	});
-
+//leitura dos conteúdos de texto
+const fileContents = document.querySelectorAll('.roger-textarea');
+fileContents.forEach((fileURL) => {
+	url = fileURL.ownerDocument.location.origin + fileURL
+		.value
+		.trim();
+	var xmlhttp,
+		text;
+	xmlhttp = new XMLHttpRequest();
+	xmlhttp.open('GET', url, false);
+	xmlhttp.send();
+	text = xmlhttp.responseText;
+	//text = 'Conteúdo remoto capturado com sucesso!!!' + url;
+	//fileURL.innerHTML = text + fileURL.innerHTML;
+	fileURL.value = text;
+});
 </script>
 {% endblock %}

@@ -13,12 +13,22 @@ const { Server } = require("http");
 
 let app = express();
 
+//!Nunjucks configuration
+//
 app.set("view engine", "njk");
-nunjucks.configure("src/views", {
+
+//Registro de rotina global
+function getVars() {
+	return this.getVariables();
+}
+const cfg = nunjucks.configure("src/views", {
 	express: app,
 	autoescape: true,
 	noCache: true,
 });
+nunjucks.defaultCfg = cfg;
+cfg.addGlobal("getNunjucksVars", getVars );
+
 app.use(cors());
 
 const port = 3000;

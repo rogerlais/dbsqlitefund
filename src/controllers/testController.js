@@ -1,10 +1,19 @@
-const Host = require("../models/Host");
-const nunjucks = require("nunjucks");
+
+// const Host = require("../models/Host");
+let nunjucks = require("nunjucks");
 
 const index = async (req, res) => {
-	const hosts = await Host.readAll();
+	const hosts = [
+		{
+			v1: "v1",
+			v2: "v2"
+		}
+	];
 	//* forma original 
-	res.render("hosts/hosts.index.njk.html", { viewDebug: true, hosts: hosts, data : JSON.stringify( hosts ) });
+	//res.render("hosts/_njk_index.html", { hosts });
+	console.log( "TESTESTSTESTES");
+	const h = nunjucks.render("tests/_njk_index_tests.html", { viewDebug: true, hosts: hosts, data : JSON.stringify( hosts ) });
+	res.send( h );
 };
 
 const create = async (req, res) => {
@@ -20,7 +29,8 @@ const readAll = async (req, res) => {
 
 const read = async (req, res) => {
 	const { name } = req.query;
-	const ret = Host.read( name );
+	//const ret = Host.read( name );
+	const ret = "Host.read( name )";
 	res.json(ret);
 };
 
