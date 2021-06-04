@@ -14,7 +14,7 @@
 		<button type="submit" class="btn btn-primary">Submit</button>
 	</form>
 
-	<label for="sel2">Mutiple select list (hold shift to select more than one):</label>
+	<label for="sel2">A partir do nome do host os demais valores serão calculados(versão final no projeto):</label>
 	<select multiple class="form-control" id="hostselection" onchange="hostChanged()">
 		{% for host in hosts %}
 			<option>
@@ -52,8 +52,21 @@
 		e.preventDefault();
 
 		const datainfo = Object.fromEntries(new FormData(formHost));
-
-		const newHost = await api.create('/hosts', datainfo);
+		if( ! datainfo.name ){
+			alert( "Dados nulos não serão processados!!!");
+			return
+		}
+		try {
+			const newHost = await api.create('/hosts', datainfo);
+			if( newHost ){
+				alert(`OK - Novo Id = ${newHost}`);
+			}else{
+				alert( 'ERRO na inserção' );
+			}			
+			location.reload();
+		} catch (err) {
+			alert(`Erro: ${err} `);
+		}
 
 		//if (res.ok) {
 		//const signin = await res.json();

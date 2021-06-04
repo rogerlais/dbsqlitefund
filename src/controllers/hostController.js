@@ -9,8 +9,12 @@ const index = async (req, res) => {
 
 const create = async (req, res) => {
 	const { name } = req.body;
-	const ret = await Host.create(name);
-	res.json(ret);
+	try{
+		const ret = await Host.create(name);
+		res.json(ret);	
+	}catch(err){
+		res.status(500).json({ error: `API Error: ${err}` });		
+	}
 };
 
 const readAll = async (req, res) => {

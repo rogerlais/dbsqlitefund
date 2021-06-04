@@ -15,6 +15,8 @@ const { Server } = require("http");
 let app = express();
 
 //*
+// Solução deseperadora para json no body
+// https://stackoverflow.com/questions/9177049/express-js-req-body-undefined
 //*
 var bodyParser = require('body-parser')
 var jsonParser = bodyParser.json();

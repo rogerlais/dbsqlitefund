@@ -3,18 +3,20 @@ const { conn } = require("../db");
 async function create(data) {
 	const sql = `
   INSERT INTO
-    hosts (name)
+    hosts (name, online, IPV4)
   VALUES
-    (?)
+    (?, "false", "1.2.3.4" )
   `;
 
 	const db = await conn();
 
-	const { name, address } = data;
-
-	const { lastID } = await db.run(sql, [name, address]);
-
-	return lastID;
+	const { name } = data;
+	try {
+		const { lastID } = await db.run(sql, [data]);
+		return lastID;
+	} catch (err) {
+		throw `Erro banco: ${err}`;
+	}
 }
 
 async function readAll() {
