@@ -10,8 +10,16 @@ const routes = require("./routes");
 const Migration = require("./migrations");
 const { dbFile } = require("./db");
 const { Server } = require("http");
+//const bodyParser = require('body-parser')
 
 let app = express();
+
+//*
+//*
+var bodyParser = require('body-parser')
+var jsonParser = bodyParser.json();
+var urlencodedParser = bodyParser.urlencoded({ extended: false });
+app.use( jsonParser );
 
 //!Nunjucks configuration
 //
@@ -36,6 +44,13 @@ const port = 3000;
 
 app.use(routes);
 app.use(express.static("public"));
+//app.use(bodyParser.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: true }));
+// parse application/json
+//app.use(bodyParser.json());
+app.use(express.json());
+
+
 
 (async () => {
 	await Migration.up();

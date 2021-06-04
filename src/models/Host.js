@@ -3,9 +3,9 @@ const { conn } = require("../db");
 async function create(data) {
 	const sql = `
   INSERT INTO
-    hosts (name, address)
+    hosts (name)
   VALUES
-    (?, ?)
+    (?)
   `;
 
 	const db = await conn();

@@ -41,7 +41,7 @@ async function destroy(resource) {
 }
 
 async function requestWithToken(method, resource, data = null) {
-	const token = localStorage.getItem("@FoodsApp:token");
+	const token = localStorage.getItem("@HostsApp:token");
 
 	try {
 		const header = {

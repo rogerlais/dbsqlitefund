@@ -8,7 +8,7 @@ const index = async (req, res) => {
 };
 
 const create = async (req, res) => {
-	const { name } = req.query;
+	const { name } = req.body;
 	const ret = await Host.create(name);
 	res.json(ret);
 };
