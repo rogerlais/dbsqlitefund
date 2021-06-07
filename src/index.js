@@ -2,15 +2,11 @@
 Main server module.
 */
 
-const fs = require("fs");
 const express = require("express");
 const cors = require("cors");
 const nunjucks = require("nunjucks");
 const routes = require("./routes");
 const Migration = require("./migrations");
-const { dbFile } = require("./db");
-const { Server } = require("http");
-//const bodyParser = require('body-parser')
 
 let app = express();
 
@@ -18,10 +14,9 @@ let app = express();
 // Solução deseperadora para json no body
 // https://stackoverflow.com/questions/9177049/express-js-req-body-undefined
 //*
-var bodyParser = require('body-parser')
+var bodyParser = require("body-parser");
 var jsonParser = bodyParser.json();
-var urlencodedParser = bodyParser.urlencoded({ extended: false });
-app.use( jsonParser );
+app.use(jsonParser);
 
 //!Nunjucks configuration
 //
@@ -37,7 +32,7 @@ const cfg = nunjucks.configure("src/views", {
 	noCache: true,
 });
 nunjucks.defaultCfg = cfg;
-cfg.addGlobal("getNunjucksVars", getVars );
+cfg.addGlobal("getNunjucksVars", getVars);
 
 app.use(cors());
 
@@ -52,8 +47,6 @@ app.use(express.urlencoded({ extended: true }));
 //app.use(bodyParser.json());
 app.use(express.json());
 
-
-
 (async () => {
 	await Migration.up();
 	//!Sempre subir o banco e checar versão do schema
@@ -62,7 +55,7 @@ app.use(express.json());
 	// }
 })();
 
-var itself = app.listen(port, ( ) => {
+app.listen(port, () => {
 	let it = app; //inserida no escopo com a atribuição let acima
 	//console.log( it );
 	console.log("Server running");
@@ -77,5 +70,5 @@ var itself = app.listen(port, ( ) => {
 		console.log("Nenhum registrada");
 	}
 	const bkUtils = require("./bk_utils");
-	bkUtils.logRoutes( it );
+	bkUtils.logRoutes(it);
 });
