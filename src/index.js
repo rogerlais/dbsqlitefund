@@ -36,9 +36,6 @@ cfg.addGlobal("getNunjucksVars", getVars);
 
 app.use(cors());
 
-const port = 3000;
-//server.expressApp = this; //* a ser usado para logs posteriormente
-
 app.use(routes);
 app.use(express.static("public"));
 //app.use(bodyParser.urlencoded({ extended: false }))
@@ -54,6 +51,10 @@ app.use(express.json());
 	// 	await Migration.up();
 	// }
 })();
+
+
+const port = 3002;
+//server.expressApp = this; //* a ser usado para logs posteriormente
 
 app.listen(port, () => {
 	let it = app; //inserida no escopo com a atribuição let acima
